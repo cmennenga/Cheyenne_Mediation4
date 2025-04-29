@@ -5,29 +5,43 @@
 async function RandomWord() {
   nn.get('body').css({
     background: 'LightPink',
-    height: '100vh'
+    height: '100vh',
+    display: 'grid',
+    justifyContent: 'center',
+    alignItems: 'center'
   })
   
   // Obtain time of click and convert to one number
   const d = new Date()
   const seconds = d.getSeconds()
   const minutes = d.getMinutes()
+  const hours = d.getHours()
   
   // Obtain random word
-  const rawData = await fetch('https://api.datamuse.com/words?topics=random&max=60')
+  const rawData = await fetch(`https://api.datamuse.com/words?rel_trg=word&max=${Math.max(seconds, 1)}`)
   const cleanData = await rawData.json()
-  let word = cleanData[seconds].word
-  
-  // Draw Word
-  nn.create('span')
-    .content(word)
-    .css({
-      color: 'white',
-      fontSize: `${minutes}vw`,
-      fontFamily: 'Futura, "Trebuchet MS", Arial, sans-serif'
+  if (cleanData.length > 0) {
+    let max = cleanData.length
+    let word = cleanData[Math.floor(Math.random() * max)].word
+    // Draw Word
+    nn.create('span')
+      .content(word)
+      .css({
+        color: 'white',
+        fontSize: `${minutes}vw`,
+        fontFamily: 'Futura, "Trebuchet MS", Arial, sans-serif'
     })
-    .addTo('body')
-  
+      .addTo('body')   
+  } else {
+    nn.create('span')
+      .content(`No words found at ${hours}:${minutes}:${seconds}`)
+      .css({
+        color: 'white',
+        fontSize: `${minutes}vw`,
+        fontFamily: 'Futura, "Trebuchet MS", Arial, sans-serif'
+    })
+      .addTo('body') 
+  } 
 }
   
 nn.on('keydown', RandomWord)
