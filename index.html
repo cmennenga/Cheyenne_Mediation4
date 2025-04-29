@@ -1,15 +1,17 @@
 <script src="https://cdn.jsdelivr.net/gh/netizenorg/netnet-standard-library/build/nn.min.js"></script>
+
 <script>
 /*global nn */
-  
+
 async function RandomWord() {
+  // set background
   nn.get('body').css({
-    background: 'LightPink',
-    height: '100vh',
-    display: 'grid',
-    justifyContent: 'center',
-    alignItems: 'center'
-  })
+      background: 'LightPink',
+      height: '100vh',
+      display: 'grid',
+      justifyContent: 'center',
+      alignItems: 'center'
+    })
   
   // Obtain time of click and convert to one number
   const d = new Date()
@@ -25,24 +27,25 @@ async function RandomWord() {
     let word = cleanData[Math.floor(Math.random() * max)].word
     // Draw Word
     nn.create('span')
-      .content(word)
+      .content(`I found the word '${word}' at ${hours}:${minutes}:${seconds}`)
       .css({
         color: 'white',
-        fontSize: `${minutes}vw`,
+        fontSize: `${seconds}px`,
         fontFamily: 'Futura, "Trebuchet MS", Arial, sans-serif'
     })
-      .addTo('body')   
+      .addTo('body') 
+  // If no word found
   } else {
     nn.create('span')
       .content(`No words found at ${hours}:${minutes}:${seconds}`)
       .css({
         color: 'white',
-        fontSize: `${minutes}vw`,
+        fontSize: `${minutes}px`,
         fontFamily: 'Futura, "Trebuchet MS", Arial, sans-serif'
     })
       .addTo('body') 
   } 
 }
   
-nn.on('keydown', RandomWord)
+nn.on('load', RandomWord)
 </script>
